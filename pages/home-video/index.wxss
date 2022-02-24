@@ -1,0 +1,12 @@
+/* pages/home-video/index.wxss */
+.video {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+
+  font-size: 28rpx;
+}
+
+.video-item {
+  width: 45%;
+}
