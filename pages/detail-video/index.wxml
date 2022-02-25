@@ -4,7 +4,8 @@
     class="mv-video" 
     src="{{mvUrlInfo.url}}" 
     autoplay
-    loop></video>
+    loop
+    referrer-policy="origin"></video>
 
 <view class="mv-detail">
   <view class="mv-d-name">{{mvDetail.name}}</view>

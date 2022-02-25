@@ -6,7 +6,7 @@ Component({
   properties: {
     itemInfo: {
       type: Object,
-      default: {}
+      value: {}
     }
   },
 

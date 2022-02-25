@@ -1,4 +1,5 @@
 <!--pages/home-music/index.wxml-->
+<!--搜索框-->
 <van-search
   disabled
   shape="round"
@@ -7,6 +8,7 @@
   bind:click-input="handleSearchClick"
 />
 
+<!--轮播图-->
 <swiper 
   class="swiper" 
   dicator-dots 
@@ -23,3 +25,16 @@
     </swiper-item>
   </block>
 </swiper>
+
+<!--歌曲推荐-->
+<view class="recommend">
+  <header-box titleText="歌曲推荐" otherText="更多"></header-box>
+  <view>
+    <block wx:for="{{recommendSongs}}" wx:key="id">
+      <music-item-v1 itemInfo="{{item}}"></music-item-v1>
+    </block>
+  </view>
+</view>
+
+<!--热门歌单-->
+<view></view>

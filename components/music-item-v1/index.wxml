@@ -1,0 +1,15 @@
+<!--components/music-item-v1/index.wxml-->
+<view class="item">
+  <image class="cover" src="{{itemInfo.al.picUrl}}"></image>
+  <view class="content">
+    <view class="name">{{itemInfo.name}}</view>
+    <view class="author-and-name">
+      <text>
+        <block wx:for="{{itemInfo.ar}}" wx:key="id">{{item.name}}{{itemInfo.ar.length-1 === index ? '' : ' / '}}</block>
+      </text>
+      <text decode="true">&nbsp;·&nbsp;</text>
+      <text>{{itemInfo.al.name}}</text>
+    </view>
+  </view>
+  <image class="icon" src="/assets/images/icons/arrow-right.png"></image>
+</view>

@@ -1,13 +1,31 @@
 /* pages/home-music/index.wxss */
+page {
+  padding: 0 30rpx;
+}
+
 /* 覆盖 第三方组件库 样式 */
+.van-search {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
 .van-search__content {
   background-color: #fff !important;
 }
 
+/* border-radius属性 模拟器偶尔会显示异常(不生效),真机正常; 部分手机真的会出现异常,是手机系统渲染网页(webView)的bug导致,设置【transform: translateY(0)】即可解决,当然模拟器可能仍会异常 */
+.swiper {
+  border-radius: 10rpx;
+  overflow: hidden;
+  transform: translateY(0);
+}
 .swiper-item {
   display: flex;
 }
 .swiper-item,
-.swiper-image{
+.swiper-image {
     width: 100%;
+}
+
+.recommend {
+  padding: 10rpx 0;
 }

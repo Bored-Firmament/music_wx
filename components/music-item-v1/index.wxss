@@ -1,0 +1,38 @@
+/* components/music-item-v1/index.wxss */
+.item {
+  display: flex;
+  padding: 15rpx 0;
+  align-items: center;
+}
+.item .cover {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 15rpx;
+}
+
+.item .content {
+  flex: 1;
+  padding: 15rpx;
+  line-height: 50rpx;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.name {
+  font-size: 34rpx;
+  color: #000;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.author-and-name {
+  font-size: 26rpx;
+  color: #999;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.item .icon {
+  width: 50rpx;
+  height: 50rpx;
+}
