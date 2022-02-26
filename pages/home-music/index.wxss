@@ -1,6 +1,6 @@
 /* pages/home-music/index.wxss */
 page {
-  padding: 0 30rpx;
+  padding: 0 20rpx;
 }
 
 /* 覆盖 第三方组件库 样式 */

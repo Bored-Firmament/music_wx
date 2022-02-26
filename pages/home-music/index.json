@@ -2,6 +2,8 @@
   "usingComponents": {
     "van-search": "@vant/weapp/search/index",
     "header-box": "/components/header-box",
-    "music-item-v1": "/components/music-item-v1"
+    "music-item-v1": "/components/music-item-v1",
+    "song-menu": "/components/song-menu",
+    "ranking-box": "/components/ranking-box"
   }
 }

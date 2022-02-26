@@ -1,0 +1,19 @@
+/* components/music-menu/index.wxss */
+
+.mm-content {
+  width: 100vw;
+  white-space: nowrap;
+  position: relative;
+  left: -20rpx;
+}
+
+.mm-item {
+  display: inline-block;
+  width: 220rpx;
+  vertical-align: top;
+
+  margin-left: 20rpx;
+}
+.mm-item:last-of-type {
+  margin-right: 20rpx;
+}

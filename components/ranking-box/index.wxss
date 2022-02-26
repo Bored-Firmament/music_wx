@@ -1,0 +1,51 @@
+/* components/ranking-box/index.wxss */
+.item {
+  display: flex;
+  margin-bottom: 20rpx;
+
+  background-color: #eee;
+  color: #000;
+  border-radius: 10rpx;
+  overflow: hidden;
+}
+
+.item .content {
+  /* 220rpx - 图片宽度; 40rpx - 文字区域内填充 */
+  width: calc(100% - 220rpx - 40rpx);
+  padding: 20rpx;
+  line-height: 45rpx;
+}
+.content .title {
+  font-size: 32rpx;
+}
+.content .list {
+  font-size: 26rpx;
+}
+.content .list .list-item {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.content .author {
+  color: #999;
+}
+
+.item .album {
+  position: relative;
+}
+.item .album .cover {
+  width: 220rpx;
+  vertical-align: top;
+}
+
+.item .album .count {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 20rpx;
+  border-radius: 10rpx;
+  padding: 10rpx;
+}

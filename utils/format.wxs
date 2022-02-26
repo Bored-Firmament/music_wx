@@ -1,7 +1,7 @@
 function formatCount(count) {
   var counter = parseInt(count)
-  if(counter > 100000000) return counter = Math.floor(counter / 100000000).toFixed(1) + '亿'
-  else if(counter > 10000) return counter = (Math.floor(counter)/10000).toFixed(1) + "万"
+  if(counter > 100000000) return counter = (counter / 100000000).toFixed(1) + '亿'
+  else if(counter > 10000) return counter = (counter / 10000).toFixed(1) + "万"
   else return counter + ''
 }
 

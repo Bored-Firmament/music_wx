@@ -1,0 +1,23 @@
+<!--components/ranking-box/index.wxml-->
+<wxs module="format" src="/utils/format.wxs"></wxs>
+<view class="item">
+  <view class="content">
+    <view class="title">{{itemInfo.name}}</view>
+    <view class="list">
+      <block wx:for="{{itemInfo.songList}}" wx:key="id">
+        <view class="list-item">
+          <text>{{index + 1 + "."}}</text>
+          <text>{{item.name}}</text>
+          <text decode>&nbsp;-&nbsp;</text>
+          <text class="author">
+            <block wx:for="{{item.ar}}" wx:for-item="arItem" wx:for-index="arIndex" wx:key="id">{{arItem.name}}{{item.ar.length-1 == arIndex ? '' : ' / '}}</block>
+          </text>
+        </view>
+      </block>
+    </view>
+  </view>
+  <view class="album">
+    <image class="cover" src="{{itemInfo.coverImgUrl}}" mode="widthFix"></image>
+    <view class="count">{{format.formatCount(itemInfo.playCount)}}</view>
+  </view>
+</view>
