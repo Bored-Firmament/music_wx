@@ -46,11 +46,11 @@
 </view>
 
 <!--巅峰榜-->
-<view class="rankings">
+<view class="rankings" wx:if="{{rankings[0].name || rankings[1].name || rankings[2].name}}">
   <header-box titleText="巅峰榜" showMore="{{false}}"></header-box>
   <view class="r-content">
     <block wx:for="{{rankings}}" wx:key="index">
-      <ranking-box itemInfo="{{item}}"></ranking-box>
+      <ranking-box itemInfo="{{item}}" wx:if="{{item.name}}"></ranking-box>
     </block>
   </view>
 </view>
