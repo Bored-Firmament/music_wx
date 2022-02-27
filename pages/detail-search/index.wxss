@@ -1,1 +1,49 @@
 /* pages/detail-search/index.wxss */
+page {
+  padding: 0 20rpx;
+}
+/* 覆盖 第三方组件库 样式 */
+.van-search {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+.van-search__content {
+  background-color: #fff !important;
+}
+
+
+.keywords .content {
+  display: flex;
+  flex-wrap: wrap;
+}
+.keywords .content .keyword {
+  padding: 10rpx 15rpx;
+  border-radius: 50rpx;
+  background-color: #fff;
+  font-size: 26rpx;
+
+  margin-right: 30rpx;
+  margin-bottom: 30rpx;
+}
+.keywords .content .keyword:first-of-type {
+  color: #2c8;
+}
+
+.suggest .s-title {
+  color: #2c8;
+  font-size: 32rpx;
+  font-weight: 800;
+}
+.suggest .s-item {
+  display: flex;
+  align-items: center;
+  padding: 10rpx 0;
+  position: relative;
+  left: -10rpx;
+  
+  font-size: 28rpx;
+}
+.suggest .s-item image {
+  width: 60rpx;
+  height: 60rpx;
+}

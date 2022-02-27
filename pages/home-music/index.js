@@ -60,6 +60,12 @@ Page({
       this.setData({ swiperHeight: rect.height })
     })
   },
+  handleToSongsListClick(event) {
+    const idx = event.currentTarget.dataset.idx;
+    wx.navigateTo({
+      url: `/pages/detail-songs/index?idx=${idx}&type=rank`,
+    })
+  },
 
   // 方法
   handleRankingData(idx) {

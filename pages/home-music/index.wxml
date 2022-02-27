@@ -11,8 +11,9 @@
 <!--轮播图-->
 <swiper 
   class="swiper" 
-  dicator-dots 
+  indicator-dots
   autoplay 
+  interval="2000"
   circular 
   style="height: {{swiperHeight}}px">
   <block wx:for="{{banners}}" wx:key="bannerId">
@@ -28,7 +29,7 @@
 
 <!--歌曲推荐-->
 <view class="recommend" wx:if="{{recommendSongs.length !== 0}}">
-  <header-box titleText="歌曲推荐" otherText="更多"></header-box>
+  <header-box titleText="歌曲推荐" otherText="更多" data-idx="1" bind:click="handleToSongsListClick"></header-box>
   <view>
     <block wx:for="{{recommendSongs}}" wx:key="id">
       <music-item-v1 itemInfo="{{item}}"></music-item-v1>
@@ -50,7 +51,7 @@
   <header-box titleText="巅峰榜" showMore="{{false}}"></header-box>
   <view class="r-content">
     <block wx:for="{{rankings}}" wx:key="index">
-      <ranking-box itemInfo="{{item}}" wx:if="{{item.name}}"></ranking-box>
+      <ranking-box itemInfo="{{item}}" wx:if="{{item.name}}" data-idx="{{index}}" bindtap="handleToSongsListClick"></ranking-box>
     </block>
   </view>
 </view>

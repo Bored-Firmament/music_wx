@@ -1,0 +1,15 @@
+<!--components/music-item-v2/index.wxml-->
+<view class="item">
+  <view class="index">{{index}}</view>
+  <view class="content">
+    <view class="name">{{itemInfo.name}}</view>
+    <view class="author">
+      <text class="music-tag">SQ</text>
+      <text class="nickname">
+        <block wx:for="{{itemInfo.ar}}" wx:key="id">{{item.name}}{{itemInfo.ar.length-1 === index ? '' : ' / '}}</block>
+        <text decode wx:if="{{itemInfo.alia[0]}}">&nbsp;·&nbsp;</text>
+        <block>{{itemInfo.alia[0]}}</block>
+      </text>
+    </view>
+  </view>
+</view>

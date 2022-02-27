@@ -1,0 +1,32 @@
+<!--components/song-detail-header/index.wxml-->
+<wxs module="format" src="/utils/format.wxs"></wxs>
+<view class="detail-view">
+  <image class="bg-image" src="{{info.coverImgUrl}}" mode="aspectFill"></image>
+  <view class="bg-cover"></view>
+
+  <view class="dv-info">
+    <image class="album" src="{{info.coverImgUrl}}" mode="aspectFill"></image>
+    <view class="content">
+      <view class="name">{{info.name}}</view>
+      <view class="person">
+        <image src="{{info.creator.avatarUrl}}" mode="aspectFill"></image>
+        <view class="nickname">{{info.creator.nickname}}</view>
+      </view>
+      <view class="desc">
+        <block>简介：</block>
+        <block wx:if="{{info.description}}">{{info.description}}</block>
+        <block wx:else>暂无</block>
+      </view>
+    </view>
+  </view>
+  <view class="dv-operate">
+    <view class="favor">
+      <image src="/assets/images/icons/favor_icon.png" mode="widthFix"></image>
+      <text>{{format.formatCount(info.subscribedCount)}}</text>
+    </view>
+    <view class="share">
+      <image src="/assets/images/icons/share_icon.png" mode="widthFix"></image>
+      <text>分享</text>
+    </view>
+  </view>
+</view>

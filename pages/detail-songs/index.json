@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "header-box": "/components/header-box",
+    "music-item-v2": "/components/music-item-v2",
+    "song-detail-header": "/components/song-detail-header"
+  }
+}

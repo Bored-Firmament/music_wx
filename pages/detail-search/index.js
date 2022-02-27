@@ -1,66 +1,40 @@
 // pages/detail-search/index.js
+import { getHotKeywords, getSuggestSongs } from "../../service/search_api"
+
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-
+    isInput: false,
+    keywords: [],
+    suggestSongs: [],
+    searchValue: "",
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad: function (options) {
-
+    this.getPageData();
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
+  // 方法
+  getPageData() {
+    getHotKeywords().then(res => {
+      this.setData({ keywords : res.result.hots });
+    })
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
+  // 事件
+  searchFocus() {
+    this.setData({ isInput: true })
   },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
+  searchCancel() {
+    this.setData({ isInput: false })
   },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
+  changeValue(event) {
+    const searchValue = event.detail;
+    this.setData({ searchValue });
+    if(!searchValue.length) {
+      this.setData({ suggestSongs : []})
+      return 
+    }
+    getSuggestSongs(searchValue).then(res => {
+      this.setData({ suggestSongs: res.result.allMatch})
+    })
   }
 })

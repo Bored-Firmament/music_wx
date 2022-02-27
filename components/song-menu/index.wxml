@@ -3,7 +3,7 @@
   <header-box titleText="{{titleText}}" otherText="更多"></header-box>
   <scroll-view scroll-x class="mm-content">
     <view class="mm-item" wx:for="{{menuList}}" wx:key="*this">
-      <song-menu-item itemInfo="{{item}}"></song-menu-item>
+      <song-menu-item itemInfo="{{item}}" data-id="{{item.id}}" bindtap="handleMenuClick"></song-menu-item>
     </view>
   </scroll-view>
 </view>

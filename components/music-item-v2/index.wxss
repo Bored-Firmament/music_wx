@@ -1,0 +1,51 @@
+/* components/music-item-v2/index.wxss */
+.item {
+  display: flex;
+  padding: 10rpx 0;
+}
+
+.index {
+  padding: 0 20rpx;
+  margin-right: 10rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 32rpx;
+}
+.content {
+  overflow: hidden;
+}
+
+.name {
+  height: 45rpx;
+  font-size: 30rpx;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.author {
+  height: 45rpx;
+  display: flex;
+  align-items: center;
+}
+
+.music-tag {
+  display: inline-block;
+  padding: 0 3rpx;
+  margin-right: 10rpx;
+  border-radius: 5rpx;
+  border: 2rpx solid #ebc475;
+  font-size: 16rpx;
+  color: #ebc475;
+}
+
+.nickname {
+  font-size: 24rpx;
+  color: #666;
+  
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

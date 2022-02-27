@@ -1,2 +1,35 @@
 <!--pages/detail-search/index.wxml-->
-<text>pages/detail-search/index.wxml</text>
+<!--搜索框-->
+<van-search
+  value="{{searchValue}}"
+  shape="round"
+  background="#fafafa"
+  placeholder="搜索您喜欢的歌曲"
+  show-action="{{isInput}}"
+  bind:change="changeValue"
+  bind:focus="searchFocus"
+  bind:cancel="searchCancel"
+/>
+
+<!--热门搜索-->
+<view class="keywords" wx:if="{{!isInput && !searchValue.length}}">
+  <header-box titleText="热门搜索" showMore="{{false}}"></header-box>
+  <view class="content">
+    <block wx:for="{{keywords}}" wx:key="first">
+      <view class="keyword">{{item.first}}</view>
+    </block>
+  </view>
+</view>
+
+<!--搜索建议-->
+<view class="suggest" wx:elif="{{isInput && searchValue.length}}">
+  <view class="s-title">搜索"{{searchValue}}"</view>
+  <view class="s-list">
+    <block wx:for="{{suggestSongs}}" wx:key="keyword">
+      <view class="s-item">
+        <image src="/assets/images/icons/search_icon.png" mode="aspectFill"></image>
+        <text>{{item.keyword}}</text>
+      </view>
+    </block>
+  </view>
+</view>

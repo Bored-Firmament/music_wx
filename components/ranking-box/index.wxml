@@ -7,10 +7,10 @@
       <block wx:for="{{itemInfo.songList}}" wx:key="id">
         <view class="list-item">
           <text>{{index + 1 + "."}}</text>
-          <text>{{item.name}}</text>
-          <text decode>&nbsp;-&nbsp;</text>
-          <text class="author">
-            <block wx:for="{{item.ar}}" wx:for-item="arItem" wx:for-index="arIndex" wx:key="id">{{arItem.name}}{{item.ar.length-1 == arIndex ? '' : ' / '}}</block>
+          <text>
+            <block>{{item.name}}</block>
+            <text decode>&nbsp;-&nbsp;</text>
+            <text class="author" wx:for="{{item.ar}}" wx:for-item="arItem" wx:for-index="arIndex" wx:key="id">{{arItem.name}}{{item.ar.length-1 == arIndex ? '' : ' / '}}</text>
           </text>
         </view>
       </block>

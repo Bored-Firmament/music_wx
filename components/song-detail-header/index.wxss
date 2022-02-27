@@ -1,0 +1,106 @@
+/* components/song-detail-header/index.wxss */
+.detail-view {
+  box-sizing: border-box;
+  width: 100vw;
+  height: 450rpx;
+  overflow: hidden;
+  position: relative;
+  left: -20rpx;
+  padding: 60rpx 50rpx;
+  overflow: hidden;
+  color: #fff;
+
+  margin-bottom: 30rpx;
+}
+
+.bg-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+}
+
+.bg-cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+}
+
+.dv-info {
+  display: flex;
+}
+
+.dv-info .album {
+  width: 220rpx;
+  height: 220rpx;
+  border-radius: 20rpx;
+  overflow: hidden;
+}
+
+.dv-info .content {
+  margin-left: 50rpx;
+  flex: 1;
+  font-size: 24rpx;
+  overflow: hidden;
+}
+
+.content .name {
+  font-size: 32rpx;
+
+  /* 显示两行 */
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  display: -moz-box;
+  -moz-line-clamp: 2;
+  -moz-box-orient: vertical;
+  word-wrap: break-word;
+  word-break: break-all;
+  white-space: normal;
+  overflow: hidden;
+}
+.content .person {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+}
+.person image {
+  width: 50rpx;
+  height: 50rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 20rpx;
+}
+
+.content .desc {
+  margin-top: 15rpx;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dv-operate {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20rpx;
+  padding: 40rpx 0;
+}
+
+.dv-operate view {
+  display: flex;
+  align-items: center;
+  font-size: 28rpx;
+}
+.dv-operate image {
+  width: 50rpx;
+  margin-right: 10rpx;
+}

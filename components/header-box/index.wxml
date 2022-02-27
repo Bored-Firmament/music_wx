@@ -1,5 +1,5 @@
 <!--components/header-box/index.wxml-->
-<view class="header-box">
+<view class="header-box" bindtap="handleHeaderClick">
   <view class="header-title">{{titleText}}</view>
   <view class="header-other" wx:if="{{showMore}}">
     <view class="ho-slot"><slot></slot></view>

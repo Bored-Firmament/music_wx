@@ -23,6 +23,20 @@
           "name": "detail-video",
           "pathName": "pages/detail-video/index",
           "query": "id=14480854",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "detail-songs-menu",
+          "pathName": "pages/detail-songs/index",
+          "query": "id=7044174061&type=menu",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "detail-search",
+          "pathName": "pages/detail-search/index",
+          "query": "",
           "scene": null,
           "launchMode": "default"
         }
