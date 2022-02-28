@@ -2,9 +2,6 @@
 import { getTopMVs } from '../../service/movie_api'
 
 Page({
-  /**
-   * 页面的初始数据
-   */
   data: {
     topMVs: [],
     hasMore: true,
