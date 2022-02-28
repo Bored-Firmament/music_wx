@@ -5,31 +5,43 @@
   shape="round"
   background="#fafafa"
   placeholder="搜索您喜欢的歌曲"
-  show-action="{{isInput}}"
+  show-action="{{isInput || searchValue.length}}"
   bind:change="changeValue"
   bind:focus="searchFocus"
+  bind:clear="searchClear"
   bind:cancel="searchCancel"
+  bind:search="searchAction"
 />
 
 <!--热门搜索-->
 <view class="keywords" wx:if="{{!isInput && !searchValue.length}}">
-  <header-box titleText="热门搜索" showMore="{{false}}"></header-box>
+  <view class="title">热门搜索</view>
   <view class="content">
     <block wx:for="{{keywords}}" wx:key="first">
-      <view class="keyword">{{item.first}}</view>
+      <view class="keyword" data-keyword="{{item.first}}" bindtap="handleTagClick">{{item.first}}</view>
     </block>
   </view>
 </view>
 
 <!--搜索建议-->
-<view class="suggest" wx:elif="{{isInput && searchValue.length}}">
-  <view class="s-title">搜索"{{searchValue}}"</view>
+<view class="suggest" wx:elif="{{isInput && searchValue.length && !resultSongs.length}}">
+  <view class="title">搜索"{{searchValue}}"</view>
   <view class="s-list">
     <block wx:for="{{suggestSongs}}" wx:key="keyword">
-      <view class="s-item">
+      <view class="s-item" data-keyword="{{item.keyword}}" bindtap="handleTagClick">
         <image src="/assets/images/icons/search_icon.png" mode="aspectFill"></image>
-        <text>{{item.keyword}}</text>
+        <rich-text nodes="{{suggestSongsNodes[index]}}"></rich-text>
       </view>
+    </block>
+  </view>
+</view>
+
+<!--最佳匹配-->
+<view class="result" wx:if="{{resultSongs.length}}">
+  <view class="title">最佳匹配</view>
+  <view class="r-list">
+    <block wx:for="{{resultSongs}}" wx:key="id">
+      <music-item-v2 itemInfo="{{item}}" index="{{index + 1}}"></music-item-v2>
     </block>
   </view>
 </view>

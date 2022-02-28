@@ -12,6 +12,20 @@ page {
 }
 
 
+.title {
+  font-size: 34rpx;
+  margin-left: 10rpx;
+  margin-bottom: 20rpx;
+}
+.suggest .title {
+  color: #2c8;
+  font-weight: 800;
+  margin-left: 0;
+}
+.result .title {
+  color: #2c8;
+}
+
 .keywords .content {
   display: flex;
   flex-wrap: wrap;
@@ -29,11 +43,6 @@ page {
   color: #2c8;
 }
 
-.suggest .s-title {
-  color: #2c8;
-  font-size: 32rpx;
-  font-weight: 800;
-}
 .suggest .s-item {
   display: flex;
   align-items: center;
@@ -46,4 +55,8 @@ page {
 .suggest .s-item image {
   width: 60rpx;
   height: 60rpx;
+}
+
+.result {
+  margin-bottom: 20rpx;
 }
