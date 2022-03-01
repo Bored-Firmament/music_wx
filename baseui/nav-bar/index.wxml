@@ -1,0 +1,22 @@
+<!--baseui/nav-bar/index.wxml-->
+<!--状态栏-->
+<view class="status" style="height: {{statusHeight}}px"></view>
+<!--导航栏-->
+<view class="nav" style="height: {{navHeight}}px">
+  <view class="left">
+    <view class="left-slot slot"><slot name="left"></slot></view>
+    <view class="left-default default">
+      <image src="/assets/images/icons/arrow-left.png"></image>
+    </view>
+  </view>
+  <view class="center">
+    <view class="center-slot slot"><slot name="center"></slot></view>
+    <view class="center-default default">
+      <text>{{title}}</text>
+    </view>
+  </view>
+  <view class="right">
+    <view class="right-slot slot"><slot name="right"></slot></view>
+    <view class="right-default default"></view>
+  </view>
+</view>

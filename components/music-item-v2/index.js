@@ -27,7 +27,7 @@ Component({
   methods: {
     handleItemClick() {
       wx.navigateTo({
-        url: '/pages/music-player?id=' + this.data.itemInfo.id,
+        url: '/pages/music-player/index?id=' + this.data.itemInfo.id,
       })
     }
   }

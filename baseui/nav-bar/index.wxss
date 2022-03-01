@@ -1,0 +1,28 @@
+/* baseui/nav-bar/index.wxss */
+.nav {
+  display: flex;
+  font-size: 28rpx;
+}
+.left, .right, .center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.left, .right {
+  width: 120rpx;
+}
+.center {
+  flex: 1;
+}
+.slot:empty + .default {
+  display: block;
+}
+.default {
+  display: none;
+}
+
+.left-default image{
+  width: 44rpx;
+  height: 44rpx;
+  display: block;
+}
