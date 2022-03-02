@@ -57,7 +57,9 @@ Page({
   handleImageLoaded() {
     throttleQueryRect(".swiper-image").then(res => {
       const rect = res[0]
-      this.setData({ swiperHeight: rect.height })
+      if(rect && rect.height) {
+        this.setData({ swiperHeight: rect.height })
+      }
     })
   },
   handleToSongsListClick(event) {

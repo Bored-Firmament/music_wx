@@ -1,4 +1,6 @@
 <!--pages/music-player/index.wxml-->
+<wxs module="format" src="/utils/format.wxs"></wxs>
+
 <!--背景-->
 <image class="bg-image" mode="aspectFill" src="{{currentSong.al.picUrl}}"></image>
 <view class="bg-cover"></view>
@@ -7,9 +9,9 @@
 <view class="nav-box" style="height: {{navHeight}}px;">
   <nav-bar>
     <view slot="center" class="tab">
-      <view class="item {{currentPage == 0 ? 'active': ''}}" data-current="0" bindtap="clickItem">歌曲</view>
+      <view class="item {{currentPage == 0 ? 'active': ''}}" data-current="0" bindtap="handleClickItem">歌曲</view>
       <view class="divider">|</view>
-      <view class="item {{currentPage == 1 ? 'active': ''}}" data-current="1" bindtap="clickItem">歌词</view>
+      <view class="item {{currentPage == 1 ? 'active': ''}}" data-current="1" bindtap="handleClickItem">歌词</view>
     </view>
   </nav-bar>
 </view>
@@ -27,16 +29,26 @@
         <view>专辑：{{currentSong.alia[0]}}</view>
       </view>
     </view>
-    <view class="lyric">默认歌词</view>
-    <slider class="slider" block-size='12' color="#999" selected-color="#fff"></slider>
+    <view class="lyric" wx:if="{{isShowMusicLyric}}">{{currentLyric}}</view>
+    <slider 
+      class="slider" 
+      block-size="12" 
+      backgroundColor="#999" 
+      activeColor="#fff"
+      min="0" 
+      max="{{sliderLength}}" 
+      data-aaa="{{sliderValue}}"
+      value="{{sliderValue}}" 
+      bindchange="bandleSliderChange" 
+      bindchanging="handleSliderChanging"></slider>
     <view class="time">
-      <view class="current">01:21</view>
-      <view class="duration">03:22</view>
+      <view class="current">{{format.formatDuration(currentTime)}}</view>
+      <view class="duration">{{format.formatDuration(currentSong.dt)}}</view>
     </view>
     <view class="operation">
       <view class="btn"><image class="btn-type" src="/assets/images/player/play_order.png"></image></view>
       <view class="btn"><image class="btn-prev" src="/assets/images/player/play_prev.png"></image></view>
-      <view class="btn"><image class="btn-mode" src="/assets/images/player/play_resume.png"></image></view>
+      <view class="btn" bindtap="handleModeClick"><image class="btn-mode" src="/assets/images/player/play_{{btnMode}}.png"></image></view>
       <view class="btn"><image class="btn-next" src="/assets/images/player/play_next.png"></image></view>
       <view class="btn"><image class="btn-list" src="/assets/images/player/play_music.png"></image></view>
     </view>

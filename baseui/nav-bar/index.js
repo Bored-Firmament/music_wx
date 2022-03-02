@@ -15,6 +15,8 @@ Component({
     navHeight: globalData.navBarHeight
   },
   methods: {
-
+    handleBack() {
+      wx.navigateBack()
+    }
   }
 })

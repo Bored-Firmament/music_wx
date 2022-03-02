@@ -11,9 +11,9 @@ function padLeftZero(str) {
 }
 
 function formatDuration(duration) {
-  var time = Math.floor(duration / 1000)
+  var time = duration / 1000;
   var minute = Math.floor(time / 60)
-  var second = Math.floor(time % 60)
+  var second = Math.floor(Math.round(time) % 60)
 
   // 若视频超长,添加小时单位
   if(minute > 60){

@@ -5,7 +5,7 @@
 <view class="nav" style="height: {{navHeight}}px">
   <view class="left">
     <view class="left-slot slot"><slot name="left"></slot></view>
-    <view class="left-default default">
+    <view class="left-default default" bindtap="handleBack">
       <image src="/assets/images/icons/arrow-left.png"></image>
     </view>
   </view>
