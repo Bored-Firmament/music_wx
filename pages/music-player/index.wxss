@@ -43,9 +43,10 @@ page {
 .album {
   flex: 5;
   display: flex;
+  justify-content: center;
   align-items: center;
 }
-.album image {
+.album .album-img {
   border-radius: 30rpx;
 }
 
@@ -128,11 +129,33 @@ page {
   width: 60rpx;
   height: 60rpx;
 }
-.btn .btn-type {
+.btn .btn-mode {
   width: 80rpx;
   height: 80rpx;
 }
-.btn .btn-mode {
+.btn .btn-status {
   width: 120rpx;
   height: 120rpx;
+}
+
+/* 歌词页 */
+/* 让滚动条不可见 */
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+}
+
+.lyric-content {
+  height: 100%;
+  text-align: center;
+}
+.lyric-item {
+  height: 60rpx;
+  line-height: 60rpx;
+  font-size: 28rpx;
+}
+.lyric-active {
+  color: #2e8;
+  font-size: 34rpx;
 }

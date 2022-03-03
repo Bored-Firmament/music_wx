@@ -20,7 +20,7 @@
 <swiper class="content" style="height: {{contentHeight}}px" current="{{currentPage}}" bindchange="handleChangeCurrent">
   <swiper-item class="music">
     <view class="album">
-      <image src="{{currentSong.al.picUrl}}" mode="widthFix"></image>
+      <image class="album-img" src="{{currentSong.al.picUrl}}" mode="widthFix"></image>
     </view>
     <view class="info">
       <view class="title">{{currentSong.name}}</view>
@@ -36,9 +36,8 @@
       backgroundColor="#999" 
       activeColor="#fff"
       min="0" 
-      max="{{sliderLength}}" 
-      data-aaa="{{sliderValue}}"
-      value="{{sliderValue}}" 
+      max="{{songDuration}}" 
+      value="{{currentSecond}}" 
       bindchange="bandleSliderChange" 
       bindchanging="handleSliderChanging"></slider>
     <view class="time">
@@ -46,14 +45,20 @@
       <view class="duration">{{format.formatDuration(currentSong.dt)}}</view>
     </view>
     <view class="operation">
-      <view class="btn"><image class="btn-type" src="/assets/images/player/play_order.png"></image></view>
+      <view class="btn" bindtap="changePlayModeClick"><image class="btn-mode" src="/assets/images/player/play_{{playModeName}}.png"></image></view>
       <view class="btn"><image class="btn-prev" src="/assets/images/player/play_prev.png"></image></view>
-      <view class="btn" bindtap="handleModeClick"><image class="btn-mode" src="/assets/images/player/play_{{btnMode}}.png"></image></view>
+      <view class="btn" bindtap="changePlayStatusClick"><image class="btn-status" src="/assets/images/player/play_{{playStatus}}.png"></image></view>
       <view class="btn"><image class="btn-next" src="/assets/images/player/play_next.png"></image></view>
       <view class="btn"><image class="btn-list" src="/assets/images/player/play_music.png"></image></view>
     </view>
   </swiper-item>
   <swiper-item class="lyric">
-    2
+    <scroll-view class="lyric-content" scroll-y scroll-top="{{scrollTop}}rpx" scroll-with-animation>
+      <block wx:for="{{lyrics}}" wx:key="index">
+        <view 
+          class="lyric-item {{index === currentLyricIndex ? 'lyric-active' : ''}}" 
+          style="margin-top: {{index === 0 ? lyricTop : 0}}px; margin-bottom: {{index === lyrics.length - 1 ? lyricBottom : 0}}px;">{{item.text}}</view>
+      </block>
+    </scroll-view>
   </swiper-item>
 </swiper>

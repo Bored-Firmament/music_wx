@@ -1,35 +1,59 @@
 // pages/music-player/index.js
-import { getSongDetail, getSongLyric } from "../../service/player_api"
 import { audioContext } from "../../store/index"
-import parseLyric from "../../utils/parse-lyric"
+import { playerStore } from "../../store/index"
+
+const playModeNames = ["order", "repeat", "random"]
 
 Page({
   data: {
-    id: '',               // 歌曲id
-    currentSong: {},      // 当前歌曲
-    sliderLength: 0,      // 进度条最大值
-    sliderValue: 0,       // 进度条当前值
-    currentTime: 0,       // 歌曲当前时间点
-    lyrics: [],           // 歌词列表
-    currentLyric: '',     // 当前歌词
-    currentLyricIndex: 0, // 当前歌词序号
-
+    currentSong: {},      // 当前歌曲 store
+    lyrics: [],           // 歌词列表 store
+    songDuration: 0,      // 进度条最大值 store
+    // 歌曲当前时间 - 相关数据
+    currentSecond: 0,       // 进度条当前值 store
+    currentTime: 0,       // 歌曲当前时间点 store
+    currentLyric: '',     // 当前歌词 store
+    currentLyricIndex: 0, // 当前歌词序号 store
+    // 页面独有数据
     isShowMusicLyric: true, // 是否展示 歌曲中的歌词
-    contentHeight: 0,     // 页面内容高度
-    currentPage: 0,       // 当前展示内容(歌曲/歌词)
-    isSliderChanging: false, // 是否 在拖动进度条
-    btnMode: 'resume',
+    contentHeight: 0,       // 页面内容高度
+    currentPage: 0,         // 当前展示内容(歌曲/歌词)
+    isSliderChanging: false,// 是否 在拖动进度条
+    isPlaying: false,       // 是否播放 store
+    playStatus: 'resume',   // 播放状态图标
+    playModeIndex: 0,       // 播放模式索引 store
+    playModeName: 'order',        // 播放模式图标
+
+    lyricBottom: 0,     // 歌词页-下空白
+    lyricTop: 0,        // 歌词页-上空白
+    scrollTop: 0,       // 歌词页-滚动距离(让当前歌词能够居中)
   },
   
   // 生命周期
-  onLoad: function (options) {
-    // 保存id
-    const index = options.id.indexOf(',');
-    const id = index === -1 ? options.id : options.id.slice(0, index);
-    // const id = options.id;
-    this.setData({ id });
-    // 请求数据
-    this.getPageData();
+  onLoad: function () {
+    // 获取 共享数据
+    playerStore.onStates(["currentSong", "lyrics", "songDuration"], ({ currentSong, lyrics, songDuration }) => {
+      if(currentSong) this.setData({ currentSong });
+      if(lyrics) this.setData({ lyrics });
+      if(songDuration !== undefined) this.setData({ songDuration });
+    })
+    playerStore.onStates(["currentTime", "currentSecond", "currentLyric", "currentLyricIndex"], ({ currentTime, currentSecond, currentLyric, currentLyricIndex}) => {
+      if(currentTime !== undefined && !this.data.isSliderChanging) this.setData({ currentTime });
+      if(currentSecond !== undefined && !this.data.isSliderChanging) this.setData({ currentSecond });
+      if(currentLyric !== undefined) this.setData({ currentLyric });
+      if(currentLyricIndex !== undefined) this.setData({ currentLyricIndex, scrollTop : currentLyricIndex * 60 });
+    })
+    playerStore.onStates(["isPlaying", "playModeIndex"], ({ isPlaying, playModeIndex }) => {
+      if(isPlaying !== undefined) {
+        this.setData({ isPlaying, playStatus :(isPlaying ? 'pause' : 'resume') });
+      }
+      if(playModeIndex !== undefined) {
+        let playModeName = playModeNames[playModeIndex];
+        console.log(playModeIndex, playModeName);
+        this.setData({ playModeIndex, playModeName });
+      }
+    })
+    
     // 动态计算内容高度
     const globalData = getApp().globalData;
     const screenHeight = globalData.screenHeight;
@@ -38,42 +62,10 @@ Page({
     const deviceRatio = globalData.deviceRatio;
     const contentHeight = screenHeight - statusBarHeight - navBarHeight;
     this.setData({ contentHeight, isShowMusicLyric : deviceRatio >= 2})
-
-    // 播放
-    audioContext.stop();
-    audioContext.src = `https://music.163.com/song/media/outer/url?id=${id}.mp3`;
-    // 尽管已经配置了[audioContext.autoplay = true],但为以防万一还是 onCanplay() 一下;
-    audioContext.onCanplay(() => {
-      audioContext.play();
-      this.setData({ btnMode : 'pause' })
-    })
-
-    audioContext.onTimeUpdate(() => {
-      const second = audioContext.currentTime;
-      // 设置 歌曲当前时间、歌曲进度条值
-      if(!this.data.isSliderChanging) {
-        this.setData({ currentTime : second * 1000, sliderValue : Math.round(second)})
-      }
-
-      // 设置歌词
-      if(this.data.isShowMusicLyric) {
-        const lyrics = this.data.lyrics;
-        const length = lyrics.length;
-        for(let i = 0 ; i < length ; i++) {
-          if(this.data.currentTime > lyrics[i].time) {
-            if( i === length - 1 ){
-              if(this.data.currentLyricIndex === i) break; 
-              this.setData({ currentLyric : lyrics[i].text, currentLyricIndex : i})
-              break;
-            }
-            continue;
-          }
-          if(this.data.currentLyricIndex === i - 1) break; 
-          this.setData({ currentLyric : lyrics[i - 1].text, currentLyricIndex : i - 1 });
-          break;
-        }
-      }
-    })
+    // 歌词页-上下空白
+    const lyricBottom = screenHeight / 2 - 15;
+    const lyricTop = contentHeight - (screenHeight / 2) - 15;
+    this.setData({ lyricBottom, lyricTop })
   },
 
   // 事件
@@ -84,48 +76,43 @@ Page({
     this.setData({ currentPage : event.currentTarget.dataset.current });
   },
   bandleSliderChange(event) {
-    this.pause()
+    this.setData({ isSliderChanging : true})
+    // 改变 歌曲进度,先暂停
+    this.pause();
+    // 拿到 新的歌曲进度
     const value = event.detail.value;
-    audioContext.seek(value)
-    this.setData({ sliderValue: value })
-    this.setData({ currentTime: value * 1000 })
-    this.resume()
-    this.setData({ isSliderChanging: false })
+    // 将 音频 跳转到 新的歌曲进度
+    audioContext.seek(value);
+    // 修改当前的 歌曲进度数据(不能修改进度条)
+    this.setData({ currentTime: value * 1000 });
+    // 继续播放
+    // 虽然模拟器中[audioContext.seek()]跳转后会自动播放,但是真机调试中不行,必须调用一下[audioContext.resume()]
+    // 另外模拟器中使用[this.resume()]会导致播放异常,但真机是正常的
+    // this.resume();
+    // 设置为 没有拖拽 让[audioContext.onTimeUpdate()]可以正常保持 视图 对应的 歌曲进度 显示
+    this.setData({ isSliderChanging: false });
   },
   handleSliderChanging(event) {
     this.setData({ isSliderChanging : true})
     this.setData({ currentTime : event.detail.value * 1000 })
   },
 
-  handleModeClick() {
-    if(audioContext.paused) this.resume()
-    else this.pause()
+  changePlayModeClick() {
+    let playModeIndex = this.data.playModeIndex + 1;
+    playModeIndex = playModeIndex === 3 ? 0 : playModeIndex;
+    playerStore.setState("playModeIndex", playModeIndex)
   },
-
-  // 方法
-  getPageData() {
-    getSongDetail(this.data.id).then(res => {
-      this.setData({ 
-        currentSong : res.songs[0], 
-        sliderLength : Number.parseInt(res.songs[0].dt / 1000),
-      })
-    })
-
-    getSongLyric(this.data.id).then(res => {
-      const stringLyric = res.lrc.lyric;
-      const lyrics = parseLyric(stringLyric);
-      this.setData({ lyrics })
-    })
+  changePlayStatusClick() {
+    if(audioContext.paused) this.resume();
+    else this.pause();
   },
 
   // 播放
-  resume() {
-    audioContext.play()
-    this.setData({ btnMode : 'pause' })
+  resume() { 
+    playerStore.dispatch("changeMusicPlayStatusAction", { isPlaying : true });
   },
   // 暂停
-  pause() {
-    audioContext.pause()
-    this.setData({ btnMode : 'resume' })
+  pause() { 
+    playerStore.dispatch("changeMusicPlayStatusAction", { isPlaying : false });
   },
 })

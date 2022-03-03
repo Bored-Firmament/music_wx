@@ -1,4 +1,6 @@
 // components/music-item-v1/index.js
+import { playerStore } from "../../store/index"
+
 Component({
   /**
    * 组件的属性列表
@@ -22,9 +24,11 @@ Component({
    */
   methods: {
     handleItemClick() {
+      const id = this.data.itemInfo.id;
       wx.navigateTo({
-        url: '/pages/music-player/index?id=' + this.data.itemInfo.id,
+        url: '/pages/music-player/index?id=' + id,
       })
+      playerStore.dispatch("playSongAction", { id })
     }
   }
 })
