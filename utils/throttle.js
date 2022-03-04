@@ -1,4 +1,4 @@
-export default function throttle(fn, interval = 1000, options = { leading: true, trailing: true }) {
+export default function throttle(fn, interval = 1000, options = { leading: true, trailing: false }) {
   // 1.记录上一次的开始时间
   const { leading, trailing, resultCallback } = options
   let lastTime = 0

@@ -6,10 +6,15 @@ const audioContext = wx.createInnerAudioContext();
 
 const playerStore = new HYEventStore({
   state: {
+    isFirstPlay: true,   // 是否是第一次点击,只有第一次点击需要生成对 audioContext 的监听函数
+
     id: 0,
     currentSong: {},      // 歌曲 - 基本信息
     lyrics: [],           // 歌曲 - 歌词列表
     songDuration: 0,      // 歌曲 - 进度条最大值(歌曲长度)
+
+    songsList: [],        // 歌曲 - 列表
+    currentSongIndex: 0,  // 当前歌曲索引
 
     currentSecond: 0,     // 歌曲当前
     currentTime: 0,       // 当前时间点
@@ -20,9 +25,23 @@ const playerStore = new HYEventStore({
     playModeIndex: 0,     // 播放模式; 0: 循环播放, 1: 单曲循环, 2: 随机播放;
   },
   actions: {
-    playSongAction(ctx, { id }) {
-      // 保存id
-      ctx.id = id;
+    playSongAction(ctx, { id, isRefresh = false }) {
+      if(ctx.id === id && !isRefresh) {
+        this.dispatch("changeMusicPlayStatusAction");
+        return
+      }
+      // 初始化(避免上一个音乐的数据干扰新的音乐的数据)
+      if(ctx.id !== id) {
+        ctx.id = id;
+        ctx.currentSong = {};
+        ctx.lyrics = [];
+        ctx.songDuration = 0;
+      }
+      ctx.currentSecond = 0;
+      ctx.currentTime = 0;
+      ctx.currentLyric = '';
+      ctx.currentLyricIndex = 0;
+
       // 根据id 请求数据
       getSongDetail(id).then(res => {
         ctx.currentSong = res.songs[0];
@@ -40,14 +59,17 @@ const playerStore = new HYEventStore({
       audioContext.autoplay = true;
 
       // 监听 audioContext 的一些事件
-      this.dispatch("setupAudioContextAction")
+      if(ctx.isFirstPlay) {
+        this.dispatch("setupAudioContextAction");
+        ctx.isFirstPlay = false;
+      }
     },
 
     setupAudioContextAction(ctx) {
       // 尽管已经配置了[audioContext.autoplay = true],但为以防万一还是 onCanplay() 一下;
       // 1.监听知否可以播放
       audioContext.onCanplay(() => {
-        this.dispatch("changeMusicPlayStatusAction", { isPlaying : true })
+        this.dispatch("changeMusicPlayStatusAction")
       })
       
       // 2.监听音频的时间变化
@@ -77,11 +99,48 @@ const playerStore = new HYEventStore({
           ctx.currentLyric = currentLyricInfo.text;
         }
       })
+
+      // 3.监听当前音频是否结束
+      audioContext.onEnded(() => {
+        this.dispatch("changeNewSongAction");
+      })
     },
 
-    changeMusicPlayStatusAction(ctx, { isPlaying }) {
+    changeMusicPlayStatusAction(ctx, isPlaying = true ) {
       ctx.isPlaying = isPlaying;
       isPlaying ? audioContext.play() : audioContext.pause();
+    },
+
+    changeNewSongAction(ctx, payload = { isNext: true, isEnded: true }) {
+      let index = ctx.currentSongIndex;
+
+      switch(ctx.playModeIndex) {
+        case 0: 
+          // 列表循环、单曲循环
+          index = payload.isNext ? index + 1 : index - 1;
+          if(index === ctx.songsList.length) index = 0;
+          if(index === -1) index = ctx.songsList.length - 1;
+          break;
+        case 1: 
+          if(!payload.isEnded) {
+            index = payload.isNext ? index + 1 : index - 1;
+            if(index === ctx.songsList.length) index = 0;
+            if(index === -1) index = ctx.songsList.length - 1;
+          }
+          break;
+        case 2: 
+          // 随机播放
+          // 列表不是只有一条歌曲,否则就不存在随机新歌的可能了
+          if(ctx.songsList.length !== 1){
+            // 下一首歌在列表中的索引 与 当前歌的索引 一致,重新随机!
+            do{
+              index = Math.floor(Math.random() * ctx.songsList.length);
+            }while(index === ctx.currentSongIndex);
+          }
+          break;
+      }
+      this.dispatch("playSongAction", { id : ctx.songsList[index].id, isRefresh : true });
+      ctx.currentSongIndex = index;
     }
   }
 })

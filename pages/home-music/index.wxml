@@ -32,7 +32,7 @@
   <header-box titleText="歌曲推荐" otherText="更多" data-idx="1" bind:click="handleToSongsListClick"></header-box>
   <view>
     <block wx:for="{{recommendSongs}}" wx:key="id">
-      <music-item-v1 itemInfo="{{item}}"></music-item-v1>
+      <music-item-v1 itemInfo="{{item}}" data-index="{{index}}" bind:click="handleSongItemClick"></music-item-v1>
     </block>
   </view>
 </view>
@@ -54,4 +54,34 @@
       <ranking-box itemInfo="{{item}}" wx:if="{{item.name}}" data-idx="{{index}}" bindtap="handleToSongsListClick"></ranking-box>
     </block>
   </view>
+</view>
+
+<view class="anchor" style="height: {{playBarIsShow ? 40 : 0}}px;"></view>
+
+<!--播放栏-->
+<view class="play-bar" wx:if="{{playBarIsShow}}">
+  <view class="left" bindtap="handlePlayBarClick">
+    <image class="album" src="{{currentSong.al.picUrl}}"></image>
+    <view class="author-and-name">
+      <text>{{currentSong.name}}</text>
+      <text decode wx:if="{{currentSong.ar}}">&nbsp;-&nbsp;</text>
+      <text>
+        <block wx:for="{{currentSong.ar}}" wx:key="id">{{item.name}}{{currentSong.ar.length-1 === index ? '' : ' / '}}</block>
+      </text>
+    </view>
+  </view>
+  <view class="right">
+    <image class="btn" src="/assets/images/music/{{ isPlaying ? 'pause': 'play' }}_icon.png" bindtap="changePlayStatusClick"></image>
+    <image class="btn" src="/assets/images/music/playlist_icon.png" bindtap="isSongsListClick"></image>
+  </view>
+</view>
+
+<!--歌曲列表-->
+<view class="songs-list" wx:if="{{isShowSongsList}}">
+  <view class="btn-hide" bindtap="isSongsListClick">收起</view>
+  <scroll-view class="content" scroll-y>
+    <block wx:for="{{songsList}}" wx:key="id">
+      <music-item-v3 itemInfo="{{item}}" data-index="{{index}}" bind:click="deleteSongClick"></music-item-v3>
+    </block>
+  </scroll-view>
 </view>

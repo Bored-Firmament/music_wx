@@ -4,6 +4,7 @@
     "header-box": "/components/header-box",
     "music-item-v1": "/components/music-item-v1",
     "song-menu": "/components/song-menu",
-    "ranking-box": "/components/ranking-box"
+    "ranking-box": "/components/ranking-box",
+    "music-item-v3": "/components/music-item-v3"
   }
 }

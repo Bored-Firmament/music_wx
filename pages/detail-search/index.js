@@ -1,4 +1,5 @@
 // pages/detail-search/index.js
+import { playerStore } from "../../store/index"
 import { getHotKeywords, getSuggestSongs, getSearchResult } from "../../service/search_api"
 import debounce from "../../utils/debounce"
 import stringToNodes from "../../utils/string2nodes"
@@ -96,6 +97,10 @@ Page({
     const keyword = event.currentTarget.dataset.keyword;
     this.setData({ searchValue: keyword });
     this.searchAction();
+  },
+  handleSongItemClick(event) {
+    playerStore.setState("songsList", this.data.resultSongs)
+    playerStore.setState("currentSongIndex", event.currentTarget.dataset.index)
   },
 
   // 触底 请求新数据

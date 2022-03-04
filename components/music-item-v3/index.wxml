@@ -1,0 +1,20 @@
+<!--components/music-item-v3/index.wxml-->
+<view class="item">
+  <view class="content">
+    <view class="info" bindtap="songItemPlayClick">
+      <view class="name">{{itemInfo.name}}</view>
+      <view class="author">
+        <block wx:if="{{itemInfo.ar}}">
+          <text decode> - </text>
+          <block wx:for="{{itemInfo.ar}}" wx:key="id">{{item.name}}{{itemInfo.ar.length-1 === index ? '' : ' / '}}</block>
+        </block>
+        <block wx:if="{{itemInfo.artists}}">
+          <text decode> - </text>
+          <block wx:for="{{itemInfo.artists}}" wx:key="id">{{item.name}}{{itemInfo.artists.length-1 === index ? '' : ' / '}}</block>
+        </block>
+      </view>
+    </view>
+    <view class="other">荐</view>
+  </view>
+  <image class="icon" src="/assets/images/player/close.png" bindtap="songItemDeleteClick"></image>
+</view>

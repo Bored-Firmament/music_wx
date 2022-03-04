@@ -1,11 +1,14 @@
 // pages/home-music/index.js
-import { rankingStore } from "../../store/index"
+import { rankingStore, playerStore, audioContext } from "../../store/index"
 import { getBanners, getSongMenu } from "../../service/music_api"
 
 import queryRect from "../../utils/query-rect"
 import throttle from "../../utils/throttle"
 
-const throttleQueryRect = throttle(queryRect, 1000)
+const throttleQueryRect = throttle(queryRect, 1000, { trailing: false })
+
+const playModeNames = ["order", "repeat", "random"]
+
 
 Page({
   data: {
@@ -14,7 +17,17 @@ Page({
     recommendSongs: [], // 推荐歌曲(热歌榜)
     hotSongMenu: [],    // 热门歌单
     recommendSongMenu: [],  // 推荐歌单
-    rankings: { 0: {}, 2: {}, 3: {} } // 榜单合集
+    rankings: { 0: {}, 2: {}, 3: {} }, // 榜单合集
+
+    id: 0,                // 当前歌曲 id -store
+    currentSong: {},      // 当前歌曲 info - store
+    isPlaying: false,     // 是否播放 - store
+    playModeIndex: 0,     // 当前歌曲 - store
+    playModeName: "order",// 当前歌曲 - store
+    playBarIsShow: false, // 是否展示播放栏
+    songsList: [],        // 歌曲列表
+
+    isShowSongsList: false, // 是否显示歌曲列表
   },
 
   onLoad: function (options) {
@@ -22,15 +35,8 @@ Page({
     this.getPageData()
     // 发起共享数据的请求
     rankingStore.dispatch("getRankingDataAction")
-    // 从store获取共享的数据
-    rankingStore.onState("hotRanking", res => {
-      if(!res.tracks) return 
-      const recommendSongs = res.tracks.slice(0, 6);
-      this.setData({ recommendSongs })
-    })
-    rankingStore.onState("newRanking", this.handleRankingData(0))
-    rankingStore.onState("originRanking", this.handleRankingData(2))
-    rankingStore.onState("upRanking", this.handleRankingData(3))
+   
+    this.getStoreData()
   },
 
   getPageData() {
@@ -47,8 +53,37 @@ Page({
       this.setData({ recommendSongMenu : res.playlists });
     })
   },
+  getStoreData() {
+     // 从 rankingStore 获取共享的数据
+     rankingStore.onState("hotRanking", res => {
+      if(!res.tracks) return 
+      const recommendSongs = res.tracks.slice(0, 6);
+      this.setData({ recommendSongs })
+    })
+    rankingStore.onState("newRanking", this.handleRankingData(0))
+    rankingStore.onState("originRanking", this.handleRankingData(2))
+    rankingStore.onState("upRanking", this.handleRankingData(3))
+    
+     // 从 playerStore 获取共享的数据
+    playerStore.onStates([ "id", "songsList", "currentSong", "isPlaying", "playModeIndex", ], ({ id, songsList, currentSong, isPlaying, playModeIndex }) => {
+      if(id) this.setData({ id })
+      if(songsList) {
+        this.setData({ songsList })
+      }
+      if(currentSong) this.setData({ currentSong, playBarIsShow: Object.keys(currentSong).length !== 0 });
+      if(isPlaying !== undefined) this.setData({ isPlaying });
+      if(playModeIndex !== undefined) {
+        let playModeName = playModeNames[playModeIndex];
+        this.setData({ playModeIndex, playModeName });
+      }
+    })
+  },
 
   // 事件
+  handleSongItemClick(event) {
+    playerStore.setState("songsList", this.data.recommendSongs)
+    playerStore.setState("currentSongIndex", event.currentTarget.dataset.index)
+  },
   handleSearchClick() {
     wx.navigateTo({
       url: '/pages/detail-search/index',
@@ -68,6 +103,21 @@ Page({
       url: `/pages/detail-songs/index?idx=${idx}&type=rank`,
     })
   },
+  changePlayStatusClick() {
+    if(audioContext.paused) this.resume();
+    else this.pause();
+  },
+  handlePlayBarClick() {
+    const id = this.data.id;
+    wx.navigateTo({
+      url: '/pages/music-player/index?id=' + id,
+    })
+    playerStore.dispatch("playSongAction", { id })
+  },
+  
+  isSongsListClick() {
+    this.setData({ isShowSongsList: !this.data.isShowSongsList })
+  },
 
   // 方法
   handleRankingData(idx) {
@@ -80,5 +130,13 @@ Page({
       let newList = { ...this.data.rankings, [idx] : { name, coverImgUrl, playCount, songList } }
       this.setData({ rankings : newList })
     }
-  }
+  },
+  // 播放
+  resume() { 
+    playerStore.dispatch("changeMusicPlayStatusAction");
+  },
+  // 暂停
+  pause() { 
+    playerStore.dispatch("changeMusicPlayStatusAction", false );
+  },
 })

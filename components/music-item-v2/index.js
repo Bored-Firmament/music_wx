@@ -33,6 +33,7 @@ Component({
         url: '/pages/music-player/index?id=' + id,
       })
       playerStore.dispatch("playSongAction", { id })
+      this.triggerEvent('click');
     }
   }
 })

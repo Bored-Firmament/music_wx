@@ -1,5 +1,5 @@
 // pages/detail-songs/index.js
-import { rankingStore, rankingMap } from "../../store/index"
+import { rankingStore, rankingMap, playerStore } from "../../store/index"
 
 import { getSongMenuDetail } from "../../service/music_api"
 
@@ -27,6 +27,11 @@ Page({
     if (this.data.ranking) {
       rankingStore.offState(this.data.ranking, this.getRankingData)
     }
+  },
+  // 事件
+  handleSongItemClick(event) {
+    playerStore.setState("songsList", this.data.songsInfo.tracks)
+    playerStore.setState("currentSongIndex", event.currentTarget.dataset.index)
   },
 
   // 方法

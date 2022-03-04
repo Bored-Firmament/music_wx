@@ -7,7 +7,7 @@
       <text>
         <block wx:for="{{itemInfo.ar}}" wx:key="id">{{item.name}}{{itemInfo.ar.length-1 === index ? '' : ' / '}}</block>
       </text>
-      <text decode="true">&nbsp;·&nbsp;</text>
+      <text wx:if="{{itemInfo.al.name}}" decode="true">&nbsp;·&nbsp;</text>
       <text>{{itemInfo.al.name}}</text>
     </view>
   </view>

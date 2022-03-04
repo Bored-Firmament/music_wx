@@ -1,0 +1,54 @@
+/* components/music-item-v3/index.wxss */
+.item {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 15rpx 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fafafa;
+  padding: 20rpx 30rpx;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  width: 620rpx;
+}
+.content .info {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.info .name {
+  color: #000;
+  font-size: 34rpx;
+}
+.info .author {
+  color: #999;
+  font-size: 24rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.content .other {
+  width: 32rpx;
+  height: 32rpx;
+  line-height: 32rpx;
+  text-align: center;
+  
+  /* padding: 0 4rpx; */
+  margin-left: 10rpx;
+  color: #fff;
+  font-size: 30rpx;
+  font-weight: 100;
+  background-color: #ccc;
+}
+
+.icon {
+  width: 28rpx;
+  height: 28rpx;
+  opacity: 0;
+}

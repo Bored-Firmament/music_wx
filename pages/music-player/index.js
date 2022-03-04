@@ -1,16 +1,16 @@
 // pages/music-player/index.js
-import { audioContext } from "../../store/index"
-import { playerStore } from "../../store/index"
+import { playerStore, audioContext } from "../../store/index"
 
 const playModeNames = ["order", "repeat", "random"]
 
 Page({
   data: {
+    songsList: [],        // 歌曲列表
     currentSong: {},      // 当前歌曲 store
     lyrics: [],           // 歌词列表 store
     songDuration: 0,      // 进度条最大值 store
     // 歌曲当前时间 - 相关数据
-    currentSecond: 0,       // 进度条当前值 store
+    currentSecond: 0,     // 进度条当前值 store
     currentTime: 0,       // 歌曲当前时间点 store
     currentLyric: '',     // 当前歌词 store
     currentLyricIndex: 0, // 当前歌词序号 store
@@ -22,17 +22,23 @@ Page({
     isPlaying: false,       // 是否播放 store
     playStatus: 'resume',   // 播放状态图标
     playModeIndex: 0,       // 播放模式索引 store
-    playModeName: 'order',        // 播放模式图标
+    playModeName: 'order',  // 播放模式图标
 
     lyricBottom: 0,     // 歌词页-下空白
     lyricTop: 0,        // 歌词页-上空白
     scrollTop: 0,       // 歌词页-滚动距离(让当前歌词能够居中)
+
+    isShowSongsList: false, // 是否显示歌曲列表
   },
   
   // 生命周期
-  onLoad: function () {
+  onLoad: function (options) {
+    playerStore.dispatch('playSongAction',{ id : options.id })
     // 获取 共享数据
-    playerStore.onStates(["currentSong", "lyrics", "songDuration"], ({ currentSong, lyrics, songDuration }) => {
+    playerStore.onStates([ "songsList", "currentSong", "lyrics", "songDuration"], ({ songsList, currentSong, lyrics, songDuration }) => {
+      if(songsList) {
+        this.setData({ songsList })
+      }
       if(currentSong) this.setData({ currentSong });
       if(lyrics) this.setData({ lyrics });
       if(songDuration !== undefined) this.setData({ songDuration });
@@ -49,7 +55,6 @@ Page({
       }
       if(playModeIndex !== undefined) {
         let playModeName = playModeNames[playModeIndex];
-        console.log(playModeIndex, playModeName);
         this.setData({ playModeIndex, playModeName });
       }
     })
@@ -68,11 +73,11 @@ Page({
     this.setData({ lyricBottom, lyricTop })
   },
 
-  // 事件
-  handleChangeCurrent(event) {
+  // ================================================== 事件 ==================================================
+  handleChangeCurrentPage(event) {
     this.setData({ currentPage : event.detail.current });
   },
-  handleClickItem(event) {
+  handleTabItemClick(event) {
     this.setData({ currentPage : event.currentTarget.dataset.current });
   },
   bandleSliderChange(event) {
@@ -106,13 +111,22 @@ Page({
     if(audioContext.paused) this.resume();
     else this.pause();
   },
-
+  prevSongClick() {
+    playerStore.dispatch("changeNewSongAction", { isNext: true, isEnded: false });
+  },
+  nextSongClick() {
+    playerStore.dispatch("changeNewSongAction", { isNext: true, isEnded: false });
+  },
+  isSongsListClick() {
+    this.setData({ isShowSongsList: !this.data.isShowSongsList })
+  },
+  // ================================================== 方法 ==================================================
   // 播放
   resume() { 
-    playerStore.dispatch("changeMusicPlayStatusAction", { isPlaying : true });
+    playerStore.dispatch("changeMusicPlayStatusAction");
   },
   // 暂停
   pause() { 
-    playerStore.dispatch("changeMusicPlayStatusAction", { isPlaying : false });
+    playerStore.dispatch("changeMusicPlayStatusAction", false );
   },
 })

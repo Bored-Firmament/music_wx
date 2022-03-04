@@ -2,6 +2,7 @@
   "navigationStyle": "custom",
   "navigationBarTextStyle": "white",
   "usingComponents": {
-    "nav-bar": "/baseui/nav-bar/index"
+    "nav-bar": "/baseui/nav-bar/index",
+    "music-item-v3": "/components/music-item-v3"
   }
 }

@@ -1,4 +1,5 @@
 // pages/detail-video/index.js
+import { playerStore } from "../../store/index"
 import { getMVURL, getMVDetail, getRelatedVideo } from "../../service/movie_api"
 
 Page({
@@ -16,6 +17,9 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    // 如果在放歌,需要暂停;
+    playerStore.dispatch("changeMusicPlayStatusAction", false);
+
     this.getPageData(options.id)
   },
 

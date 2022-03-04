@@ -41,7 +41,7 @@
   <view class="title">最佳匹配</view>
   <view class="r-list">
     <block wx:for="{{resultSongs}}" wx:key="id">
-      <music-item-v2 itemInfo="{{item}}" index="{{index + 1}}"></music-item-v2>
+      <music-item-v2 itemInfo="{{item}}" index="{{index + 1}}" data-index="{{index}}" bind:click="handleSongItemClick"></music-item-v2>
     </block>
   </view>
 </view>

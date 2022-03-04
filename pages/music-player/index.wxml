@@ -9,15 +9,15 @@
 <view class="nav-box" style="height: {{navHeight}}px;">
   <nav-bar>
     <view slot="center" class="tab">
-      <view class="item {{currentPage == 0 ? 'active': ''}}" data-current="0" bindtap="handleClickItem">歌曲</view>
+      <view class="item {{currentPage == 0 ? 'active': ''}}" data-current="0" bindtap="handleTabItemClick">歌曲</view>
       <view class="divider">|</view>
-      <view class="item {{currentPage == 1 ? 'active': ''}}" data-current="1" bindtap="handleClickItem">歌词</view>
+      <view class="item {{currentPage == 1 ? 'active': ''}}" data-current="1" bindtap="handleTabItemClick">歌词</view>
     </view>
   </nav-bar>
 </view>
 
 <!--本体-->
-<swiper class="content" style="height: {{contentHeight}}px" current="{{currentPage}}" bindchange="handleChangeCurrent">
+<swiper class="content" style="height: {{contentHeight}}px" current="{{currentPage}}" bindchange="handleChangeCurrentPage">
   <swiper-item class="music">
     <view class="album">
       <image class="album-img" src="{{currentSong.al.picUrl}}" mode="widthFix"></image>
@@ -46,10 +46,10 @@
     </view>
     <view class="operation">
       <view class="btn" bindtap="changePlayModeClick"><image class="btn-mode" src="/assets/images/player/play_{{playModeName}}.png"></image></view>
-      <view class="btn"><image class="btn-prev" src="/assets/images/player/play_prev.png"></image></view>
+      <view class="btn" bindtap="prevSongClick"><image class="btn-prev" src="/assets/images/player/play_prev.png"></image></view>
       <view class="btn" bindtap="changePlayStatusClick"><image class="btn-status" src="/assets/images/player/play_{{playStatus}}.png"></image></view>
-      <view class="btn"><image class="btn-next" src="/assets/images/player/play_next.png"></image></view>
-      <view class="btn"><image class="btn-list" src="/assets/images/player/play_music.png"></image></view>
+      <view class="btn" bindtap="nextSongClick"><image class="btn-next" src="/assets/images/player/play_next.png"></image></view>
+      <view class="btn" bindtap="isSongsListClick"><image class="btn-list" src="/assets/images/player/play_music.png"></image></view>
     </view>
   </swiper-item>
   <swiper-item class="lyric">
@@ -62,3 +62,13 @@
     </scroll-view>
   </swiper-item>
 </swiper>
+
+<!--歌曲列表-->
+<view class="songs-list" wx:if="{{isShowSongsList}}">
+  <view class="btn-hide" bindtap="isSongsListClick">收起</view>
+  <scroll-view class="content" scroll-y>
+    <block wx:for="{{songsList}}" wx:key="id">
+      <music-item-v3 itemInfo="{{item}}" data-index="{{index}}" bind:click="deleteSongClick"></music-item-v3>
+    </block>
+  </scroll-view>
+</view>

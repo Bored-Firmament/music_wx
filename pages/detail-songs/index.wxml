@@ -7,6 +7,6 @@
 </block>
 <view class="ds-content">
   <block wx:for="{{songsInfo.tracks}}" wx:key="id">
-    <music-item-v2 itemInfo="{{item}}" index="{{index + 1}}"></music-item-v2>
+    <music-item-v2 itemInfo="{{item}}" index="{{index + 1}}" data-index="{{index}}" bind:click="handleSongItemClick"></music-item-v2>
   </block>
 </view>
