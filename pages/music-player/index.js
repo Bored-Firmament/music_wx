@@ -34,30 +34,8 @@ Page({
   // 生命周期
   onLoad: function (options) {
     playerStore.dispatch('playSongAction',{ id : options.id })
-    // 获取 共享数据
-    playerStore.onStates([ "songsList", "currentSong", "lyrics", "songDuration"], ({ songsList, currentSong, lyrics, songDuration }) => {
-      if(songsList) {
-        this.setData({ songsList })
-      }
-      if(currentSong) this.setData({ currentSong });
-      if(lyrics) this.setData({ lyrics });
-      if(songDuration !== undefined) this.setData({ songDuration });
-    })
-    playerStore.onStates(["currentTime", "currentSecond", "currentLyric", "currentLyricIndex"], ({ currentTime, currentSecond, currentLyric, currentLyricIndex}) => {
-      if(currentTime !== undefined && !this.data.isSliderChanging) this.setData({ currentTime });
-      if(currentSecond !== undefined && !this.data.isSliderChanging) this.setData({ currentSecond });
-      if(currentLyric !== undefined) this.setData({ currentLyric });
-      if(currentLyricIndex !== undefined) this.setData({ currentLyricIndex, scrollTop : currentLyricIndex * 60 });
-    })
-    playerStore.onStates(["isPlaying", "playModeIndex"], ({ isPlaying, playModeIndex }) => {
-      if(isPlaying !== undefined) {
-        this.setData({ isPlaying, playStatus :(isPlaying ? 'pause' : 'resume') });
-      }
-      if(playModeIndex !== undefined) {
-        let playModeName = playModeNames[playModeIndex];
-        this.setData({ playModeIndex, playModeName });
-      }
-    })
+
+    this.getStoreData();
     
     // 动态计算内容高度
     const globalData = getApp().globalData;
@@ -82,18 +60,12 @@ Page({
   },
   bandleSliderChange(event) {
     this.setData({ isSliderChanging : true})
-    // 改变 歌曲进度,先暂停
-    this.pause();
     // 拿到 新的歌曲进度
     const value = event.detail.value;
     // 将 音频 跳转到 新的歌曲进度
     audioContext.seek(value);
     // 修改当前的 歌曲进度数据(不能修改进度条)
     this.setData({ currentTime: value * 1000 });
-    // 继续播放
-    // 虽然模拟器中[audioContext.seek()]跳转后会自动播放,但是真机调试中不行,必须调用一下[audioContext.resume()]
-    // 另外模拟器中使用[this.resume()]会导致播放异常,但真机是正常的
-    // this.resume();
     // 设置为 没有拖拽 让[audioContext.onTimeUpdate()]可以正常保持 视图 对应的 歌曲进度 显示
     this.setData({ isSliderChanging: false });
   },
@@ -112,7 +84,7 @@ Page({
     else this.pause();
   },
   prevSongClick() {
-    playerStore.dispatch("changeNewSongAction", { isNext: true, isEnded: false });
+    playerStore.dispatch("changeNewSongAction", { isNext: false, isEnded: false });
   },
   nextSongClick() {
     playerStore.dispatch("changeNewSongAction", { isNext: true, isEnded: false });
@@ -121,6 +93,33 @@ Page({
     this.setData({ isShowSongsList: !this.data.isShowSongsList })
   },
   // ================================================== 方法 ==================================================
+  // store 相关
+  getStoreData() {
+    // 获取 共享数据
+    playerStore.onStates([ "songsList", "currentSong", "lyrics", "songDuration"], ({ songsList, currentSong, lyrics, songDuration }) => {
+      if(songsList) {
+        this.setData({ songsList })
+      }
+      if(currentSong) this.setData({ currentSong });
+      if(lyrics) this.setData({ lyrics });
+      if(songDuration !== undefined) this.setData({ songDuration });
+    })
+    playerStore.onStates(["currentTime", "currentSecond", "currentLyric", "currentLyricIndex"], ({ currentTime, currentSecond, currentLyric, currentLyricIndex}) => {
+      if(currentTime !== undefined && !this.data.isSliderChanging) this.setData({ currentTime });
+      if(currentSecond !== undefined && !this.data.isSliderChanging) this.setData({ currentSecond });
+      if(currentLyric !== undefined) this.setData({ currentLyric });
+      if(currentLyricIndex !== undefined) this.setData({ currentLyricIndex, scrollTop : currentLyricIndex * 60 });
+    })
+    playerStore.onStates(["isPlaying", "playModeIndex"], ({ isPlaying, playModeIndex }) => {
+      if(isPlaying !== undefined) {
+        this.setData({ isPlaying, playStatus :(isPlaying ? 'pause' : 'resume') });
+      }
+      if(playModeIndex !== undefined) {
+        let playModeName = playModeNames[playModeIndex];
+        this.setData({ playModeIndex, playModeName });
+      }
+    })
+  },
   // 播放
   resume() { 
     playerStore.dispatch("changeMusicPlayStatusAction");

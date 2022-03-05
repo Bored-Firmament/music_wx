@@ -24,7 +24,6 @@ Page({
     isPlaying: false,     // 是否播放 - store
     playModeIndex: 0,     // 当前歌曲 - store
     playModeName: "order",// 当前歌曲 - store
-    playBarIsShow: false, // 是否展示播放栏
     songsList: [],        // 歌曲列表
 
     isShowSongsList: false, // 是否显示歌曲列表
@@ -35,7 +34,7 @@ Page({
     this.getPageData()
     // 发起共享数据的请求
     rankingStore.dispatch("getRankingDataAction")
-   
+    // 获取共享的数据
     this.getStoreData()
   },
 
@@ -70,7 +69,7 @@ Page({
       if(songsList) {
         this.setData({ songsList })
       }
-      if(currentSong) this.setData({ currentSong, playBarIsShow: Object.keys(currentSong).length !== 0 });
+      if(currentSong) this.setData({ currentSong });
       if(isPlaying !== undefined) this.setData({ isPlaying });
       if(playModeIndex !== undefined) {
         let playModeName = playModeNames[playModeIndex];

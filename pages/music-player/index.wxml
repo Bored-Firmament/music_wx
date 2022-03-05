@@ -26,7 +26,7 @@
       <view class="title">{{currentSong.name}}</view>
       <view class="subtitle">
         <view>{{currentSong.al.name}}</view>
-        <view>专辑：{{currentSong.alia[0]}}</view>
+        <view wx:if="{{currentSong.alia[0]}}">专辑：{{currentSong.alia[0]}}</view>
       </view>
     </view>
     <view class="lyric" wx:if="{{isShowMusicLyric}}">{{currentLyric}}</view>

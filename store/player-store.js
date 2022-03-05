@@ -2,7 +2,7 @@ import { HYEventStore } from "hy-event-store"
 import { getSongDetail, getSongLyric } from "../service/player_api"
 import parseLyric from "../utils/parse-lyric"
 
-const audioContext = wx.createInnerAudioContext();
+const audioContext = wx.getBackgroundAudioManager();
 
 const playerStore = new HYEventStore({
   state: {
@@ -45,6 +45,7 @@ const playerStore = new HYEventStore({
       // 根据id 请求数据
       getSongDetail(id).then(res => {
         ctx.currentSong = res.songs[0];
+        audioContext.title = res.songs[0].name;
         ctx.songDuration = Number.parseInt(res.songs[0].dt / 1000);
       })
       getSongLyric(id).then(res => {
@@ -104,10 +105,38 @@ const playerStore = new HYEventStore({
       audioContext.onEnded(() => {
         this.dispatch("changeNewSongAction");
       })
+
+      // 4.监听音乐暂停/播放/停止
+      // 播放状态
+      audioContext.onPlay(() => {
+        ctx.isPlaying = true
+      })
+      // 暂停状态
+      audioContext.onPause(() => {
+        ctx.isPlaying = false
+      })
+      audioContext.onStop(() => {
+        ctx.isPlaying = false
+        
+        ctx.currentSecond = 0;
+        ctx.currentTime = 0;
+        ctx.currentLyric = '';
+        ctx.currentLyricIndex = 0;
+      })
+      audioContext.onPrev(() => {
+        this.dispatch("changeNewSongAction", { isNext: false, isEnded: false })
+      })
+      audioContext.onNext(() => {
+        this.dispatch("changeNewSongAction", { isNext: true, isEnded: false })
+      })
     },
 
     changeMusicPlayStatusAction(ctx, isPlaying = true ) {
       ctx.isPlaying = isPlaying;
+      if (ctx.isPlaying) {
+        audioContext.src = `https://music.163.com/song/media/outer/url?id=${ctx.id}.mp3`
+        audioContext.title = ctx.currentSong.name
+      }
       isPlaying ? audioContext.play() : audioContext.pause();
     },
 

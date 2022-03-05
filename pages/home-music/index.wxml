@@ -56,12 +56,12 @@
   </view>
 </view>
 
-<view class="anchor" style="height: {{playBarIsShow ? 40 : 0}}px;"></view>
+<view class="anchor" style="height: {{currentSong.id ? 40 : 0}}px;"></view>
 
 <!--播放栏-->
-<view class="play-bar" wx:if="{{playBarIsShow}}">
+<view class="play-bar" wx:if="{{currentSong.id}}">
   <view class="left" bindtap="handlePlayBarClick">
-    <image class="album" src="{{currentSong.al.picUrl}}"></image>
+    <image class="album" style="animation-play-state: {{isPlaying ? 'running' : 'paused'}};" src="{{currentSong.al.picUrl}}"></image>
     <view class="author-and-name">
       <text>{{currentSong.name}}</text>
       <text decode wx:if="{{currentSong.ar}}">&nbsp;-&nbsp;</text>
