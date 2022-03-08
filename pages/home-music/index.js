@@ -27,9 +27,14 @@ Page({
     songsList: [],        // 歌曲列表
 
     isShowSongsList: false, // 是否显示歌曲列表
+
+    showPage: false,      // 页面初始不展示、等数据差不多了再展示(或者说:等待2s再展示);
   },
 
-  onLoad: function (options) {
+  onLoad: function () {
+    setTimeout(() => {
+      this.setData({showPage: true})
+    }, 2000)
     // 发起获取本页数据的请求
     this.getPageData()
     // 发起共享数据的请求

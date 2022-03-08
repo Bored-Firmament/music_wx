@@ -1,87 +1,89 @@
 <!--pages/home-music/index.wxml-->
-<!--搜索框-->
-<van-search
-  disabled
-  shape="round"
-  background="#fafafa"
-  placeholder="搜索您喜欢的歌曲"
-  bind:click-input="handleSearchClick"
-/>
+<view wx:if="{{showPage}}">
+  <!--搜索框-->
+  <van-search
+    disabled
+    shape="round"
+    background="#fafafa"
+    placeholder="搜索您喜欢的歌曲"
+    bind:click-input="handleSearchClick"
+  />
 
-<!--轮播图-->
-<swiper 
-  class="swiper" 
-  indicator-dots
-  autoplay 
-  interval="2000"
-  circular 
-  style="height: {{swiperHeight}}px">
-  <block wx:for="{{banners}}" wx:key="bannerId">
-    <swiper-item class="swiper-item">
-      <image 
-        class="swiper-image" 
-        src="{{item.pic}}" 
-        mode="widthFix" 
-        bindload="handleImageLoaded"></image>
-    </swiper-item>
-  </block>
-</swiper>
-
-<!--歌曲推荐-->
-<view class="recommend" wx:if="{{recommendSongs.length !== 0}}">
-  <header-box titleText="歌曲推荐" otherText="更多" data-idx="1" bind:click="handleToSongsListClick"></header-box>
-  <view>
-    <block wx:for="{{recommendSongs}}" wx:key="id">
-      <music-item-v1 itemInfo="{{item}}" data-index="{{index}}" bind:click="handleSongItemClick"></music-item-v1>
+  <!--轮播图-->
+  <swiper 
+    class="swiper" 
+    indicator-dots
+    autoplay 
+    interval="2000"
+    circular 
+    style="height: {{swiperHeight}}px">
+    <block wx:for="{{banners}}" wx:key="bannerId">
+      <swiper-item class="swiper-item">
+        <image 
+          class="swiper-image" 
+          src="{{item.pic}}" 
+          mode="widthFix" 
+          bindload="handleImageLoaded"></image>
+      </swiper-item>
     </block>
-  </view>
-</view>
+  </swiper>
 
-<!--热门歌单-->
-<view wx:if="{{hotSongMenu.length !== 0}}">
-  <song-menu titleText="热门歌单" menuList="{{hotSongMenu}}"></song-menu>
-</view>
-<!--推荐歌单-->
-<view wx:if="{{recommendSongMenu.length !== 0}}">
-  <song-menu titleText="推荐歌单" menuList="{{recommendSongMenu}}"></song-menu>
-</view>
-
-<!--巅峰榜-->
-<view class="rankings" wx:if="{{rankings[0].name || rankings[1].name || rankings[2].name}}">
-  <header-box titleText="巅峰榜" showMore="{{false}}"></header-box>
-  <view class="r-content">
-    <block wx:for="{{rankings}}" wx:key="index">
-      <ranking-box itemInfo="{{item}}" wx:if="{{item.name}}" data-idx="{{index}}" bindtap="handleToSongsListClick"></ranking-box>
-    </block>
-  </view>
-</view>
-
-<view class="anchor" style="height: {{currentSong.id ? 40 : 0}}px;"></view>
-
-<!--播放栏-->
-<view class="play-bar" wx:if="{{currentSong.id}}">
-  <view class="left" bindtap="handlePlayBarClick">
-    <image class="album" style="animation-play-state: {{isPlaying ? 'running' : 'paused'}};" src="{{currentSong.al.picUrl}}"></image>
-    <view class="author-and-name">
-      <text>{{currentSong.name}}</text>
-      <text decode wx:if="{{currentSong.ar}}">&nbsp;-&nbsp;</text>
-      <text>
-        <block wx:for="{{currentSong.ar}}" wx:key="id">{{item.name}}{{currentSong.ar.length-1 === index ? '' : ' / '}}</block>
-      </text>
+  <!--歌曲推荐-->
+  <view class="recommend" wx:if="{{recommendSongs.length !== 0}}">
+    <header-box titleText="歌曲推荐" otherText="更多" data-idx="1" bind:click="handleToSongsListClick"></header-box>
+    <view>
+      <block wx:for="{{recommendSongs}}" wx:key="id">
+        <music-item-v1 itemInfo="{{item}}" data-index="{{index}}" bind:click="handleSongItemClick"></music-item-v1>
+      </block>
     </view>
   </view>
-  <view class="right">
-    <image class="btn" src="/assets/images/music/{{ isPlaying ? 'pause': 'play' }}_icon.png" bindtap="changePlayStatusClick"></image>
-    <image class="btn" src="/assets/images/music/playlist_icon.png" bindtap="isSongsListClick"></image>
-  </view>
-</view>
 
-<!--歌曲列表-->
-<view class="songs-list" wx:if="{{isShowSongsList}}">
-  <view class="btn-hide" bindtap="isSongsListClick">收起</view>
-  <scroll-view class="content" scroll-y>
-    <block wx:for="{{songsList}}" wx:key="id">
-      <music-item-v3 itemInfo="{{item}}" data-index="{{index}}" bind:click="deleteSongClick"></music-item-v3>
-    </block>
-  </scroll-view>
+  <!--热门歌单-->
+  <view wx:if="{{hotSongMenu.length !== 0}}">
+    <song-menu titleText="热门歌单" menuList="{{hotSongMenu}}"></song-menu>
+  </view>
+  <!--推荐歌单-->
+  <view wx:if="{{recommendSongMenu.length !== 0}}">
+    <song-menu titleText="推荐歌单" menuList="{{recommendSongMenu}}"></song-menu>
+  </view>
+
+  <!--巅峰榜-->
+  <view class="rankings" wx:if="{{rankings[0].name || rankings[1].name || rankings[2].name}}">
+    <header-box titleText="巅峰榜" showMore="{{false}}"></header-box>
+    <view class="r-content">
+      <block wx:for="{{rankings}}" wx:key="index">
+        <ranking-box itemInfo="{{item}}" wx:if="{{item.name}}" data-idx="{{index}}" bindtap="handleToSongsListClick"></ranking-box>
+      </block>
+    </view>
+  </view>
+
+  <view class="anchor" style="height: {{currentSong.id ? 40 : 0}}px;"></view>
+
+  <!--播放栏-->
+  <view class="play-bar" wx:if="{{currentSong.id}}">
+    <view class="left" bindtap="handlePlayBarClick">
+      <image class="album" style="animation-play-state: {{isPlaying ? 'running' : 'paused'}};" src="{{currentSong.al.picUrl}}"></image>
+      <view class="author-and-name">
+        <text>{{currentSong.name}}</text>
+        <text decode wx:if="{{currentSong.ar}}">&nbsp;-&nbsp;</text>
+        <text>
+          <block wx:for="{{currentSong.ar}}" wx:key="id">{{item.name}}{{currentSong.ar.length-1 === index ? '' : ' / '}}</block>
+        </text>
+      </view>
+    </view>
+    <view class="right">
+      <image class="btn" src="/assets/images/music/{{ isPlaying ? 'pause': 'play' }}_icon.png" bindtap="changePlayStatusClick"></image>
+      <image class="btn" src="/assets/images/music/playlist_icon.png" bindtap="isSongsListClick"></image>
+    </view>
+  </view>
+
+  <!--歌曲列表-->
+  <view class="songs-list" wx:if="{{isShowSongsList}}">
+    <view class="btn-hide" bindtap="isSongsListClick">收起</view>
+    <scroll-view class="content" scroll-y>
+      <block wx:for="{{songsList}}" wx:key="id">
+        <music-item-v3 itemInfo="{{item}}" data-index="{{index}}" bind:click="deleteSongClick"></music-item-v3>
+      </block>
+    </scroll-view>
+  </view>
 </view>

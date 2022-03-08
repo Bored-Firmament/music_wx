@@ -5,12 +5,14 @@ Page({
   data: {
     topMVs: [],
     hasMore: true,
+    
+    showPage: false,      // 页面初始不展示、等数据差不多了再展示(或者说:等待2s再展示);
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
+  onLoad: function () {
+    setTimeout(() => {
+      this.setData({showPage: true})
+    }, 2000)
     // const res =  await getTopMVs(0)
     // if(res.code && res.code === 200) this.setData({ topMVs : res.data })
     this.getTopMVData(0)
