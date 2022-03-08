@@ -1,26 +1,20 @@
 // components/song-menu-item/index.js
 Component({
-  /**
-   * 组件的属性列表
-   */
   properties: {
     itemInfo: {
       type: Object,
       value: {}
     }
   },
-
-  /**
-   * 组件的初始数据
-   */
   data: {
 
   },
-
-  /**
-   * 组件的方法列表
-   */
   methods: {
-
+    handleMenuClick() {
+      const id = this.data.itemInfo.id;
+      wx.navigateTo({
+        url: `/pages/detail-songs/index?id=${id}&type=menu`,
+      })
+    },
   }
 })

@@ -1,0 +1,21 @@
+/* pages/detail-menus/index.wxss */
+page {
+  padding: 0 20rpx;
+}
+
+.title {
+  height: 100rpx;
+  line-height: 100rpx;
+  font-weight: 800;
+  font-size: 40rpx;
+}
+
+.menu-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.menu-item {
+  width: 340rpx;
+  margin-bottom: 10rpx;
+}

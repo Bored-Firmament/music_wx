@@ -25,11 +25,10 @@ Component({
    * 组件的方法列表
    */
   methods: {
-    handleMenuClick(event) {
-      const id = event.currentTarget.dataset.id;
+    handleMoreClick() {
       wx.navigateTo({
-        url: `/pages/detail-songs/index?id=${id}&type=menu`,
+        url: '/pages/detail-menus/index',
       })
-    },
+    }
   }
 })
