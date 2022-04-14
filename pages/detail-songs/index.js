@@ -16,6 +16,7 @@ Page({
     if(type === "rank") {
       const ranking = rankingMap[options.idx];
       this.setData({ ranking });
+      console.log(ranking);
       rankingStore.onState(ranking, this.getRankingData)
     }else if(options.type === "menu") {
       getSongMenuDetail(options.id).then(res => {

@@ -26,7 +26,8 @@ const playerStore = new HYEventStore({
   },
   actions: {
     playSongAction(ctx, { id, isRefresh = false }) {
-      if(ctx.id === id && !isRefresh) {
+      console.log(ctx.id, id);
+      if(ctx.id == id && !isRefresh) {
         this.dispatch("changeMusicPlayStatusAction");
         return
       }

@@ -96,21 +96,30 @@ Page({
   // store 相关
   getStoreData() {
     // 获取 共享数据
-    playerStore.onStates([ "songsList", "currentSong", "lyrics", "songDuration"], ({ songsList, currentSong, lyrics, songDuration }) => {
+    playerStore.onStates([ "songsList", "currentSong", "lyrics", "songDuration"], this.handleSongsData())
+    playerStore.onStates(["currentTime", "currentSecond", "currentLyric", "currentLyricIndex"], this.handleSongData())
+    playerStore.onStates(["isPlaying", "playModeIndex"], this.handleSongStatus())
+  },
+  handleSongsData() {
+    return ({ songsList, currentSong, lyrics, songDuration }) => {
       if(songsList) {
         this.setData({ songsList })
       }
       if(currentSong) this.setData({ currentSong });
       if(lyrics) this.setData({ lyrics });
       if(songDuration !== undefined) this.setData({ songDuration });
-    })
-    playerStore.onStates(["currentTime", "currentSecond", "currentLyric", "currentLyricIndex"], ({ currentTime, currentSecond, currentLyric, currentLyricIndex}) => {
+    }
+  },
+  handleSongData() {
+    return ({ currentTime, currentSecond, currentLyric, currentLyricIndex}) => {
       if(currentTime !== undefined && !this.data.isSliderChanging) this.setData({ currentTime });
       if(currentSecond !== undefined && !this.data.isSliderChanging) this.setData({ currentSecond });
       if(currentLyric !== undefined) this.setData({ currentLyric });
       if(currentLyricIndex !== undefined) this.setData({ currentLyricIndex, scrollTop : currentLyricIndex * 60 });
-    })
-    playerStore.onStates(["isPlaying", "playModeIndex"], ({ isPlaying, playModeIndex }) => {
+    }
+  },
+  handleSongStatus(){
+    return ({ isPlaying, playModeIndex }) => {
       if(isPlaying !== undefined) {
         this.setData({ isPlaying, playStatus :(isPlaying ? 'pause' : 'resume') });
       }
@@ -118,7 +127,7 @@ Page({
         let playModeName = playModeNames[playModeIndex];
         this.setData({ playModeIndex, playModeName });
       }
-    })
+    }
   },
   // 播放
   resume() { 

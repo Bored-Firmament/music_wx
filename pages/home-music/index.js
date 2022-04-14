@@ -58,29 +58,22 @@ Page({
     })
   },
   getStoreData() {
-     // 从 rankingStore 获取共享的数据
-     rankingStore.onState("hotRanking", res => {
-      if(!res.tracks) return 
-      const recommendSongs = res.tracks.slice(0, 6);
-      this.setData({ recommendSongs })
-    })
+    // 从 rankingStore 获取共享的数据
+    rankingStore.onState("hotRanking", this.handleHotRankingData())
     rankingStore.onState("newRanking", this.handleRankingData(0))
     rankingStore.onState("originRanking", this.handleRankingData(2))
     rankingStore.onState("upRanking", this.handleRankingData(3))
     
      // 从 playerStore 获取共享的数据
-    playerStore.onStates([ "id", "songsList", "currentSong", "isPlaying", "playModeIndex", ], ({ id, songsList, currentSong, isPlaying, playModeIndex }) => {
-      if(id) this.setData({ id })
-      if(songsList) {
-        this.setData({ songsList })
-      }
-      if(currentSong) this.setData({ currentSong });
-      if(isPlaying !== undefined) this.setData({ isPlaying });
-      if(playModeIndex !== undefined) {
-        let playModeName = playModeNames[playModeIndex];
-        this.setData({ playModeIndex, playModeName });
-      }
-    })
+    playerStore.onStates([ "id", "songsList", "currentSong", "isPlaying", "playModeIndex", ], this.handlePlayerStoreData())
+  },
+  onUnload(){
+    if (this.data.recommendSongs) rankingStore.offState("hotRanking", this.handleHotRankingData())
+    if (this.data.rankings[0]) rankingStore.offState("newRanking", this.handleRankingData(0))
+    if (this.data.rankings[2]) rankingStore.offState("originRanking", this.handleRankingData(2))
+    if (this.data.rankings[3]) rankingStore.offState("upRanking", this.handleRankingData(3))
+
+    playerStore.offfStates([ "id", "songsList", "currentSong", "isPlaying", "playModeIndex", ], this.handlePlayerStoreData())
   },
 
   // 事件
@@ -133,6 +126,27 @@ Page({
       const songList = res.tracks.slice(0, 3)
       let newList = { ...this.data.rankings, [idx] : { name, coverImgUrl, playCount, songList } }
       this.setData({ rankings : newList })
+    }
+  },
+  handleHotRankingData() {
+    return (res) => {
+      if(!res.tracks) return 
+      const recommendSongs = res.tracks.slice(0, 6);
+      this.setData({ recommendSongs })
+    }
+  },
+  handlePlayerStoreData() {
+    return ({ id, songsList, currentSong, isPlaying, playModeIndex }) => {
+      if(id) this.setData({ id })
+      if(songsList) {
+        this.setData({ songsList })
+      }
+      if(currentSong) this.setData({ currentSong });
+      if(isPlaying !== undefined) this.setData({ isPlaying });
+      if(playModeIndex !== undefined) {
+        let playModeName = playModeNames[playModeIndex];
+        this.setData({ playModeIndex, playModeName });
+      }
     }
   },
   // 播放
