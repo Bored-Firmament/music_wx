@@ -30,7 +30,7 @@
 
   <!--歌曲推荐-->
   <view class="recommend" wx:if="{{recommendSongs.length !== 0}}">
-    <header-box titleText="歌曲推荐" otherText="更多" data-idx="1" bind:click="handleToSongsListClick"></header-box>
+    <header-box titleText="歌曲推荐" otherText="更多" data-id="3778678" bind:click="handleToSongsListClick"></header-box>
     <view>
       <block wx:for="{{recommendSongs}}" wx:key="id">
         <music-item-v1 itemInfo="{{item}}" data-index="{{index}}" bind:click="handleSongItemClick"></music-item-v1>
@@ -48,11 +48,11 @@
   </view>
 
   <!--巅峰榜-->
-  <view class="rankings" wx:if="{{rankings[0].name || rankings[1].name || rankings[2].name}}">
+  <view class="rankings" wx:if="{{rankings[3779629].name || rankings[2884035].name || rankings[19723756].name}}">
     <header-box titleText="巅峰榜" showMore="{{false}}"></header-box>
     <view class="r-content">
-      <block wx:for="{{rankings}}" wx:key="index">
-        <ranking-box itemInfo="{{item}}" wx:if="{{item.name}}" data-idx="{{index}}" bindtap="handleToSongsListClick"></ranking-box>
+      <block wx:for="{{rankings}}" wx:for-index="key" wx:key="key">
+        <ranking-box itemInfo="{{item}}" wx:if="{{item.name}}" data-id="{{key}}" bindtap="handleToSongsListClick"></ranking-box>
       </block>
     </view>
   </view>

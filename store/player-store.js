@@ -26,7 +26,6 @@ const playerStore = new HYEventStore({
   },
   actions: {
     playSongAction(ctx, { id, isRefresh = false }) {
-      console.log(ctx.id, id);
       if(ctx.id == id && !isRefresh) {
         this.dispatch("changeMusicPlayStatusAction");
         return
@@ -71,7 +70,7 @@ const playerStore = new HYEventStore({
       // 尽管已经配置了[audioContext.autoplay = true],但为以防万一还是 onCanplay() 一下;
       // 1.监听知否可以播放
       audioContext.onCanplay(() => {
-        this.dispatch("changeMusicPlayStatusAction")
+        this.dispatch("setNewMusicOptions")
       })
       
       // 2.监听音频的时间变化
@@ -134,11 +133,11 @@ const playerStore = new HYEventStore({
 
     changeMusicPlayStatusAction(ctx, isPlaying = true ) {
       ctx.isPlaying = isPlaying;
-      if (ctx.isPlaying) {
-        audioContext.src = `https://music.163.com/song/media/outer/url?id=${ctx.id}.mp3`
-        audioContext.title = ctx.currentSong.name
-      }
       isPlaying ? audioContext.play() : audioContext.pause();
+    },
+    setNewMusicOptions() {
+      audioContext.src = `https://music.163.com/song/media/outer/url?id=${ctx.id}.mp3`;
+      audioContext.title = ctx.currentSong.name;
     },
 
     changeNewSongAction(ctx, payload = { isNext: true, isEnded: true }) {

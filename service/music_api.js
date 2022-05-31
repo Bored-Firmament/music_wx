@@ -6,9 +6,9 @@ export function getBanners() {
   })
 }
 
-export function getRanking(idx) {
-  return xxRequest.get('/top/list', {
-    idx
+export function getRanking(id) {
+  return xxRequest.get('/playlist/detail', {
+    id
   })
 }
 
@@ -24,7 +24,7 @@ export function getSongMenuHot() {
 }
 
 export function getSongMenuDetail(id) {
-  return xxRequest.get('/playlist/detail/dynamic', {
+  return xxRequest.get('/playlist/detail', {
     id
   })
 }

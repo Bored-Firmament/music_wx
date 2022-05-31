@@ -33,7 +33,7 @@ Page({
   
   // 生命周期
   onLoad: function (options) {
-    playerStore.dispatch('playSongAction',{ id : options.id })
+    playerStore.dispatch('playSongAction',{ id : options.id });
 
     this.getStoreData();
     

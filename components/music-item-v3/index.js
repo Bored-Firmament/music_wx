@@ -17,7 +17,7 @@ Component({
       wx.navigateTo({
         url: '/pages/music-player/index?id=' + id,
       })
-      playerStore.dispatch("playSongAction");
+      playerStore.dispatch("playSongAction", { id });
     },
     songItemDeleteClick() {
       this.triggerEvent('click');

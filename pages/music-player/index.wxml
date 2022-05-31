@@ -57,7 +57,7 @@
       <block wx:for="{{lyrics}}" wx:key="index">
         <view 
           class="lyric-item {{index === currentLyricIndex ? 'lyric-active' : ''}}" 
-          style="margin-top: {{index === 0 ? lyricTop : 0}}px; margin-bottom: {{index === lyrics.length - 1 ? lyricBottom : 0}}px;">{{item.text}}</view>
+          style="margin-top: {{index === 0 ? lyricTop : 0}}px; margin-bottom: {{index === lyrics.length - 1 ? lyricBottom : 0}}px;">{{item && item.text}}</view>
       </block>
     </scroll-view>
   </swiper-item>
